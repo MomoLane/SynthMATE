@@ -3,10 +3,11 @@ from setuptools import setup, find_packages
 setup(
     name="SynthMATE",
     version="1.0",
-    description="Automated Azo Dye Synthesis Raspberry Pi, Python and Arduino to control peristaltic pumps",
+    description="Automated Azo Dye Synthesis using Raspberry Pi, Python and Arduino to control peristaltic pumps",
     author="Collen Skhosana",
     author_email="amykelani.skhosana@yahoo.com",
     role="Research Associate (Developer)",
+    affiliation="University of Johannesburg",
     packages=find_packages(),
     include_package_data=True,
     Install_requires=[
