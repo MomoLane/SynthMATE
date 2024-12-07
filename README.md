@@ -1,6 +1,6 @@
 # SynthMATE 
 
-SynthMATE is an automated synthesis platform designed to conduct azo dye reactions and can be modified for other chemical synthesis as per user requirements. Utilizing Python and OpenCV, SynthMATE provides users with a flexible interface to control peristaltic pumps, take real-time reaction photos, and monitor each step of the chemical reaction process.
+SynthMATE is an automated synthesis platform designed to conduct chemical reactions and can be modified for other chemical synthesis as per user requirements. Utilizing Python and OpenCV, SynthMATE provides users with a flexible interface to control peristaltic pumps, take real-time reaction photos, and monitor each step of the chemical reaction process.
 
 # Overview
 
