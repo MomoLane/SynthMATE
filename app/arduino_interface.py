@@ -1,19 +1,11 @@
 import pyfirmata
-
+import time
+from config import CONFIG  # Import the config.py file
 
 class ArduinoInterface:
     def __init__(self, port):
         self.board = pyfirmata.Arduino(port)
-        self.pumps = {
-            "Aniline 1": 2,
-            "Aniline 2": 3,
-            "Sodium Nitrite": 4,
-            "Sodium Hydroxide": 5,
-            "Deionized Water": 6,
-            "Waste": 7,
-            "Wash": 8
-        }
-
+        self.pump_pins = CONFIG["pump_pins"]  # Use pump pins from CONFIG
         self.iterator = pyfirmata.util.Iterator(self.board)
         self.iterator.start()
         print(f"Connected to Arduino on {port}")
@@ -30,10 +22,13 @@ class ArduinoInterface:
         if 0 <= pump_index < len(self.pumps):
             self.pumps[pump_index].write(0)
 
-    def dispense(self, pump, volume):
-        """Simulate dispensing of volume through the specified pump."""
-        print(f"Dispensing {volume} mL via pump {pump}...")
-        self.board.digital[pump].write(1)
+    def dispense(self, pump_pin, volume):
+        calibration = self.pump_pins.get(pump_pin, 1)  # Default to 1 if missing
+        duration = volume / calibration
+        print(f"Dispensing {volume} mL via Pump {pump_pin} (duration: {duration}s)...")
+        self.board.digital[pump_pin].write(1)
+        time.sleep(duration)
+        self.board.digital[pump_pin].write(0)
 
     def stop_all(self):
         """Stop all pumps immediately."""
