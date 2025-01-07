@@ -1,19 +1,34 @@
+import sys
+print(sys.path)
+
+
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from app.controller import ReactionController
 from app.arduino_interface import ArduinoInterface
 from app.logger import setup_logging
 from app.data_loader import load_reaction_data
-from app.synthesis import AzoDyeSynthesis
+from app.Azodye import AzoDyeSynthesis
+from app.Heck import HeckReaction
+from app.Suzuki import SuzukiReaction
+from app.AgNP import AgNPsynthesis
 from app.image_processing import capture_image, analyze_color
 from app.config import CONFIG
 import logging
+from pyfirmata import Arduino, util
+
+
+
+
+# Initialize the Arduino board using the port from CONFIG
+#board = Arduino(CONFIG["arduino_port"])
+
 
 
 class SynthMATEApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("SynthMATE - Automated Azo Dye Synthesis")
+        self.root.title("SynthMATE - Automated Synthesis Platform")
         self.root.geometry("800x600")
 
         self.arduino = ArduinoInterface(CONFIG["arduino_port"])
@@ -58,8 +73,8 @@ class SynthMATEApp:
     def load_reaction_data(self):
         file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx"), ("CSV files", "*.csv")])
         try:
-            self.synthesis = AzoDyeSynthesis(self.board, self.pump_pins)
-            self.synthesis.load_reaction_data(file_path)
+            self.AzoDye = AzoDyeSynthesis(self.board, self.pump_pins)
+            self.AzoDye.load_reaction_data(file_path)
             messagebox.showinfo("Success", "Reaction data loaded successfully.")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load data: {e}")
@@ -91,7 +106,45 @@ class SynthMATEApp:
             messagebox.showinfo("Success", "Synthesis completed successfully!")
         except Exception as e:
             messagebox.showerror("Error", str(e))
+            
+    def start_Heck_Reaction():
+        try:
+            app = HeckReaction(board, pump_pins={
+                 'DMF': 2, 'Iodobenzene': 3, 'Ethyl acrylate': 4
+             })
+            file_path = filedialog.askopenfilename()
+            app.load_reaction_data(file_path)
+            app.run_synthesis()
+            messagebox.showinfo("Success", "Synthesis completed successfully!")
+        except Exception as e:
+             messagebox.showerror("Error", str(e))
 
+    def start_Suzuki_Reaction():
+        try:
+            app = SuzukiReaction(board, pump_pins={
+                'Ethanol': 2, 'Iodobenzene': 3
+            })
+            file_path = filedialog.askopenfilename()
+            app.load_reaction_data(file_path)
+            app.run_synthesis()
+            messagebox.showinfo("Success", "Synthesis completed successfully!")
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+            
+
+    def start_AgNP_Reaction():
+        try:
+            app = AgNPsynthesis(board, pump_pins={
+                'Deionized Water': 2, 'AgNO3 Solution': 3, 'NaOH Solution' : 4
+            })
+            file_path = filedialog.askopenfilename()
+            app.load_reaction_data(file_path)
+            app.run_synthesis()
+            messagebox.showinfo("Success", "Synthesis completed successfully!")
+        except Exception as e:
+            messagebox.showerror("Error", str(e)) 
+
+           
     def pause_reaction(self):
         self.controller.pause_reactions()
 
