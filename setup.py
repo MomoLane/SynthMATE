@@ -5,6 +5,7 @@ setup(
     version="1.0",
     description="Automated Azo Dye Synthesis using Raspberry Pi, Python and Arduino to control peristaltic pumps",
     author="Collen Skhosana",
+    co-author="Amogelang Moeng"
     author_email="amykelani.skhosana@yahoo.com",
     role="Research Associate (Developer)",
     affiliation="University of Johannesburg",
